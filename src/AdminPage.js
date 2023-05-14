@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, Table } from 'reactstrap';
 import './AdminPage.css';
 import EnabledIcon from './AdminPage/EnabledIcon';
 import EditLocationModal from './AdminPage/EditLocationModal';
+import { Navigate } from 'react-router-dom';
+import AuthContext from './store/auth-context';
 
 const AdminPage = () => {
+	const authContext = useContext(AuthContext);
 	const fetchLocations = useCallback(async () => {
-		const response = await fetch(`http://localhost:4590/locations`);
+		const response = await fetch(`/api/locations`);
 		const locations = await response.json();
 		console.log('Retrieved Locations from Server', locations);
 		setLocations(locations);
@@ -26,6 +29,11 @@ const AdminPage = () => {
 		setShowEditLocationModal(true);
 		setCurrentEditLocation(null);
 	};
+
+	if (!authContext.isAdmin) {
+		// Kick their butt back home
+		return <Navigate to="/home" />;
+	}
 
 	return (
 		<>

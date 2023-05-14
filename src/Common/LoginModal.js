@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Input, InputGroup, InputGroupText } from 'reactstrap';
 import Modal from '../Common/Modal';
+import AuthContext from '../store/auth-context';
 
-const LoginModal = ({ setToken, closeModalHandler, showSignUpModal }) => {
+const LoginModal = ({ closeModalHandler, showSignUpModal }) => {
+	const authContext = useContext(AuthContext);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
@@ -12,36 +14,7 @@ const LoginModal = ({ setToken, closeModalHandler, showSignUpModal }) => {
 		showSignUpModal();
 	};
 
-	const loginHandler = async () => {
-		const credentialsJSON = {
-			username,
-			password,
-		};
-
-		console.log('SENDING', credentialsJSON);
-		const response = await fetch('http://localhost:4591/login', {
-			method: 'POST',
-			body: JSON.stringify(credentialsJSON),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-
-		const data = await response.json();
-
-		if (response.status !== 200) {
-			setErrorMessage(data.message);
-		} else {
-			const token = data.token;
-			closeModalHandler();
-
-			// Set token in the localStorage so on page refresh we know we are still logged in
-			localStorage.setItem('token', token);
-
-			// Set token in state so the login page disappears
-			setToken(token);
-		}
-	};
+	const loginHandler = () => authContext.loginHandler(username, password, setErrorMessage, closeModalHandler);
 
 	return (
 		<>

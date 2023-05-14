@@ -18,7 +18,7 @@ const SignUpModal = ({ closeModalHandler }) => {
 		};
 
 		console.log('SENDING', credentialsJSON);
-		const response = await fetch('http://localhost:4591/register', {
+		const response = await fetch('/auth/register', {
 			method: 'POST',
 			body: JSON.stringify(credentialsJSON),
 			headers: {

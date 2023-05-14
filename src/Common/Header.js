@@ -1,9 +1,10 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import MultiFilterButton from '../HomePage/MultiFilterButton';
 import DistanceFilterButton from '../HomePage/DistanceFilterButton';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import LoginModal from './LoginModal';
 import SignUpModal from './SignUpModal';
+import AuthContext from '../store/auth-context';
 
 // TODO: Move these states into a Provider so we don't need to prop-drill
 const HomePageFilters = ({ distanceFilter, setDistanceFilter, multiFilter, setMultiFilter }) => {
@@ -24,9 +25,7 @@ const HomePageFilters = ({ distanceFilter, setDistanceFilter, multiFilter, setMu
 };
 
 const Header = ({ distanceFilter, setDistanceFilter, multiFilter, setMultiFilter }) => {
-	const [token, setToken] = useState(null);
-	const [name, setName] = useState(null);
-	const [isAdmin, setIsAdmin] = useState(false);
+	const authContext = useContext(AuthContext);
 
 	const [showLoginModal, setShowLoginModal] = useState(false);
 	const showLoginModalHandler = () => setShowLoginModal(true);
@@ -36,44 +35,10 @@ const Header = ({ distanceFilter, setDistanceFilter, multiFilter, setMultiFilter
 	const showSignUpModalHandler = () => setShowSignUpModal(true);
 	const hideSignUpModalHandler = () => setShowSignUpModal(false);
 
-	const logoutHandler = () => {
-		setToken(null);
-		localStorage.removeItem('token');
-	};
-
-	useEffect(() => {
-		// If you refresh the page, we need to get that token back into the state so we hide the login button
-		const tokenFromStorage = localStorage.getItem('token');
-		setToken(tokenFromStorage);
-
-		const response = fetch(`http://localhost:4591/checkuser`, {
-			method: 'POST',
-			headers: {
-				// This is required. NodeJS server won't know how to read it without it.
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${tokenFromStorage}`,
-			},
-		});
-		response
-			.then((response) => {
-				return response.json();
-			})
-			.then((json) => {
-				if (json.message) {
-					console.error('Error getting user information: ', json.message);
-					setName(null);
-					setIsAdmin(false);
-				} else {
-					console.log('Retrieved user information:', json);
-					setName(json.name);
-					setIsAdmin(json.isAdmin);
-				}
-			});
-	}, []);
-
+	const nameDisplay = authContext.name ? `(${authContext.name})` : '';
 	return (
 		<div className="header-section-2">
-			{showLoginModal && <LoginModal setToken={setToken} closeModalHandler={hideLoginModalHandler} showSignUpModal={showSignUpModalHandler} />}
+			{showLoginModal && <LoginModal closeModalHandler={hideLoginModalHandler} showSignUpModal={showSignUpModalHandler} />}
 			{showSignUpModal && <SignUpModal closeModalHandler={hideSignUpModalHandler} />}
 			<div className="header-contents">
 				<div className="header-contents-left">
@@ -87,7 +52,7 @@ const Header = ({ distanceFilter, setDistanceFilter, multiFilter, setMultiFilter
 					<Link className="header-link" to="about">
 						<span>About</span>
 					</Link>
-					{isAdmin && (
+					{authContext.isAdmin && (
 						<Link className="header-link" to="admin">
 							<span>Admin</span>
 						</Link>
@@ -108,15 +73,14 @@ const Header = ({ distanceFilter, setDistanceFilter, multiFilter, setMultiFilter
 							}
 						/>
 					</Routes>
-
-					{!token && (
+					{!authContext.token && (
 						<a href="#" onClick={showLoginModalHandler} className="header-link">
 							<span>Login</span>
 						</a>
 					)}
-					{token && (
-						<a href="#" onClick={logoutHandler} className="header-link">
-							<span>({name}) Logout</span>
+					{authContext.token && (
+						<a href="#" onClick={authContext.logoutHandler} className="header-link">
+							<span>{nameDisplay} Logout</span>
 						</a>
 					)}
 				</div>

@@ -19,7 +19,7 @@ const HomePage = ({ distanceFilter, multiFilter }) => {
 	const [currentLocation, setCurrentLocation] = useState({});
 
 	const fetchLocations = useCallback(async () => {
-		const response = await fetch(`http://localhost:4590/categoryGroups`);
+		const response = await fetch(`/api/categoryGroups`);
 		const locations = await response.json();
 		console.log('Retrieved Locations from Server', locations);
 		setLocations(locations);

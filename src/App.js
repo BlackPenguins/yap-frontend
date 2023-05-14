@@ -5,6 +5,8 @@ import NotFoundPage from './NotFoundPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './Common/Header';
 import { useState } from 'react';
+import AuthContext from './store/auth-context';
+import AboutPage from './AboutPage';
 
 /**
  * Create React App:
@@ -26,6 +28,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Navigate to="home" />} />
 					<Route path="home" element={<HomePage distanceFilter={distanceFilter} multiFilter={multiFilter} />} />
+					<Route path="about" element={<AboutPage />} />
 					<Route path="admin" element={<AdminPage />} />
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>

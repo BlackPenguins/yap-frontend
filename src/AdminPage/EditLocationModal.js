@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap';
 import Modal from '../Common/Modal';
 import './EditLocationModal.css';
+import AuthContext from '../store/auth-context';
 
 const EditLocationModal = ({ currentEditLocation, fetchLocations, closeModalHandler }) => {
+	const authContext = useContext(AuthContext);
+
 	const [name, setName] = useState('');
 	const [categoryID, setCategoryID] = useState(0);
 	const [distanceID, setDistanceID] = useState(0);
@@ -31,12 +34,16 @@ const EditLocationModal = ({ currentEditLocation, fetchLocations, closeModalHand
 
 	const updateLocation = async (locationID, locationJSON) => {
 		console.log('Updating location', locationJSON);
-		const response = await fetch(`http://localhost:4590/locations/${locationID}`, {
+
+		const tokenFromStorage = authContext.token;
+
+		const response = await fetch(`/api/locations/${locationID}`, {
 			method: 'PATCH',
 			body: JSON.stringify(locationJSON),
 			headers: {
 				// This is required. NodeJS server won't know how to read it without it.
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${tokenFromStorage}`,
 			},
 		});
 		const data = await response.json();
@@ -60,12 +67,15 @@ const EditLocationModal = ({ currentEditLocation, fetchLocations, closeModalHand
 			locationJSON.distanceID = distances[0].DistanceID;
 		}
 
-		const response = await fetch(`http://localhost:4590/locations`, {
+		const tokenFromStorage = localStorage.getItem('token');
+
+		const response = await fetch(`/api/locations`, {
 			method: 'PUT',
 			body: JSON.stringify(locationJSON),
 			headers: {
 				// This is required. NodeJS server won't know how to read it without it.
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${tokenFromStorage}`,
 			},
 		});
 		const data = await response.json();
@@ -146,7 +156,7 @@ const EditLocationModal = ({ currentEditLocation, fetchLocations, closeModalHand
 	const [categories, setCategories] = useState([]);
 
 	const fetchCategories = useCallback(async () => {
-		const response = await fetch('http://localhost:4590/categories');
+		const response = await fetch('/api/categories');
 		const categories = await response.json();
 		setCategories(categories);
 	}, []);
@@ -154,7 +164,7 @@ const EditLocationModal = ({ currentEditLocation, fetchLocations, closeModalHand
 	const [distances, setDistances] = useState([]);
 
 	const fetchDistances = useCallback(async () => {
-		const response = await fetch('http://localhost:4590/distances');
+		const response = await fetch('/api/distances');
 		const distances = await response.json();
 		setDistances(distances);
 	}, []);

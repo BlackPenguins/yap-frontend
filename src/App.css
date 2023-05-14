@@ -13,6 +13,10 @@
 	}
 }
 
+body {
+	background-color: #e4fbff;
+}
+
 .App-header {
 	background-color: #282c34;
 	min-height: 100vh;
@@ -359,4 +363,35 @@
 .filter-button.enabled {
 	opacity: 1;
 	border: solid 2px #e6e53b;
+}
+
+.not-found {
+	text-align: center;
+	margin-top: 50px;
+}
+
+.about-section {
+	background-color: #96b5cf;
+}
+
+.about-section .title,
+.todo-section .title {
+	font-weight: bold;
+	margin: 5px 0px;
+}
+
+.about-section,
+.todo-section {
+	margin: 30px;
+	padding: 25px;
+	border: 2px solid #424242;
+}
+
+.tagline {
+	margin: 30px;
+	/* padding: 25px; */
+}
+
+.todo-section {
+	background-color: #dfd791;
 }
