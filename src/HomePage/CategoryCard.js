@@ -10,7 +10,9 @@ const CategoryCard = ({ map, locationCollection, setCurrentLocation, distanceFil
 					const setLocationAs = () => {
 						setCurrentLocation(location);
 						if (location.Longitude && location.Latitude) {
-							map.panTo({ lat: location.Latitude, lng: location.Longitude });
+							if (map) {
+								map.panTo({ lat: location.Latitude, lng: location.Longitude });
+							}
 						}
 					};
 
