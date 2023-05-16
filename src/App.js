@@ -5,7 +5,6 @@ import NotFoundPage from './NotFoundPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './Common/Header';
 import { useState } from 'react';
-import AuthContext from './store/auth-context';
 import AboutPage from './AboutPage';
 
 /**

@@ -52,6 +52,11 @@ body {
 	font-weight: bold;
 }
 
+.location-deathDate {
+	font-weight: bold;
+	color: #b30100;
+}
+
 .location {
 	padding-top: 1rem;
 	padding-bottom: 1rem;
@@ -156,7 +161,6 @@ body {
 }
 
 #details-death-date-container {
-	display: none;
 	position: absolute;
 	left: 3px;
 	font-weight: bold;

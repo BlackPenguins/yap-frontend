@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
 import './Modal.css';
-import { ModalHeader } from 'reactstrap';
 
 const Backdrop = ({ closeHandler }) => {
 	return <div className="backdrop" onClick={closeHandler}></div>;

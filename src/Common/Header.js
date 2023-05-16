@@ -1,7 +1,7 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import MultiFilterButton from '../HomePage/MultiFilterButton';
 import DistanceFilterButton from '../HomePage/DistanceFilterButton';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import LoginModal from './LoginModal';
 import SignUpModal from './SignUpModal';
 import AuthContext from '../store/auth-context';

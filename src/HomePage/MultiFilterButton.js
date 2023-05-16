@@ -16,7 +16,7 @@ const MultiFilterButton = ({ icon, filterName, multiFilter, setMultiFilter }) =>
 
 	return (
 		<div onClick={setFilter} className={classes.join(' ')} title="Supports Wi-Fi" id="wifi_button">
-			<img src={`images/symbols/${icon}.png`} />
+			<img alt={icon} src={`images/symbols/${icon}.png`} />
 		</div>
 	);
 };

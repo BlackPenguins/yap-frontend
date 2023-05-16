@@ -31,9 +31,12 @@ const CategoryCard = ({ map, locationCollection, setCurrentLocation, distanceFil
 								<div className="distance">{location.Distance}</div>
 							</div>
 
-							<div className="description">{location.Description}</div>
-
-							<div id="location-description" className="location-description"></div>
+							<div className="description">{location.Punchline}</div>
+							{location?.DeathDateFormatted && (
+								<div id="location-deathDate" className="location-deathDate">
+									Date of Death: {location.DeathDateFormatted}
+								</div>
+							)}
 							<div className="location-images">
 								<InfoIcons location={location} />
 							</div>

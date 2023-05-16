@@ -44,10 +44,7 @@ const LoginModal = ({ closeModalHandler, showSignUpModal }) => {
 				</InputGroup>
 				<div>{errorMessage}</div>
 				<div>
-					Not a user?{' '}
-					<a href="#" onClick={signUpHandler}>
-						Sign up now!
-					</a>
+					Not a user? <button onClick={signUpHandler}>Sign up now!</button>
 				</div>
 				<div className="save-button">
 					<Button onClick={loginHandler}>Sign In</Button>

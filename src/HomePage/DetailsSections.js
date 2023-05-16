@@ -15,9 +15,11 @@ const DetailsSection = ({ currentLocation }) => {
 						{currentLocation.MenuFileName}
 					</a>
 				</div>
-				<div id="details-description" className="details-description">
-					{currentLocation?.Description}
-				</div>
+				{currentLocation?.Description && (
+					<div id="details-description" className="details-description">
+						{currentLocation?.Description}
+					</div>
+				)}
 				<div className="details-images-container">
 					<InfoIcons location={currentLocation} />
 				</div>
@@ -53,12 +55,14 @@ const DetailsSection = ({ currentLocation }) => {
 					</div>
 				</div>
 				<div id="details-frequency-container">
-					<span>{currentLocation?.Frequency}</span>
+					<span>Visited {currentLocation?.FrequencyCount || 0}x</span>
 				</div>
-				<div id="details-death-date-container">
-					Date of Death:
-					<span>{currentLocation?.DeathDate}</span>
-				</div>
+				{currentLocation.DeathDateFormatted && (
+					<div id="details-death-date-container">
+						Date of Death:
+						<span>{currentLocation.DeathDateFormatted}</span>
+					</div>
+				)}
 			</Col>
 
 			<Col className="details-col details-end-col" lg={4}>
