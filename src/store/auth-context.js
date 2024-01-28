@@ -13,6 +13,8 @@ export const AuthContextProvider = ({ children }) => {
 	const [token, setToken] = useState(null);
 	const [name, setName] = useState(null);
 	const [isAdmin, setIsAdmin] = useState(false);
+	const [userID, setUserID] = useState(0);
+	const [users, setUsers] = useState([]);
 
 	const loginHandler = async (username, password, setErrorMessage, closeModalFunction) => {
 		const credentialsJSON = {
@@ -55,6 +57,7 @@ export const AuthContextProvider = ({ children }) => {
 		const tokenFromStorage = localStorage.getItem('token');
 		setToken(tokenFromStorage);
 		fetchUserData();
+		fetchUsers();
 	}, []);
 
 	useEffect(() => {
@@ -80,11 +83,30 @@ export const AuthContextProvider = ({ children }) => {
 					console.error('Error getting user information: ', json.message);
 					setName(null);
 					setIsAdmin(false);
+					setUserID(0);
 				} else {
 					console.log('Retrieved user information:', json);
 					setName(json.name);
 					setIsAdmin(json.isAdmin);
+					setUserID(json.userID);
 				}
+			});
+	};
+
+	const fetchUsers = () => {
+		const response = fetch(`/auth/users`, {
+			headers: {
+				// This is required. NodeJS server won't know how to read it without it.
+				'Content-Type': 'application/json',
+			},
+		});
+		response
+			.then((response) => {
+				return response.json();
+			})
+			.then((json) => {
+				console.log('USERE', json);
+				setUsers(json);
 			});
 	};
 
@@ -94,8 +116,10 @@ export const AuthContextProvider = ({ children }) => {
 				isAdmin,
 				token,
 				name,
+				userID,
 				loginHandler,
 				logoutHandler,
+				users,
 			}}
 		>
 			{children}

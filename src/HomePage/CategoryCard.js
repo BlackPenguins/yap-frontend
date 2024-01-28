@@ -1,7 +1,8 @@
 import { Card, CardHeader, ListGroup, ListGroupItem } from 'reactstrap';
 import InfoIcons from './InfoIcons';
+import { useCallback, useState } from 'react';
 
-const CategoryCard = ({ map, locationCollection, setCurrentLocation, distanceFilter, multiFilter }) => {
+const CategoryCard = ({ map, locationCollection, setCurrentLocation, fetchReviews, distanceFilter, multiFilter }) => {
 	return (
 		<Card>
 			<CardHeader className="location-category">{locationCollection.categoryName}</CardHeader>
@@ -14,6 +15,7 @@ const CategoryCard = ({ map, locationCollection, setCurrentLocation, distanceFil
 								map.panTo({ lat: location.Latitude, lng: location.Longitude });
 							}
 						}
+						fetchReviews(location.LocationID);
 					};
 
 					if (distanceFilter != null && location.Distance !== distanceFilter) {
@@ -25,7 +27,7 @@ const CategoryCard = ({ map, locationCollection, setCurrentLocation, distanceFil
 					}
 
 					return (
-						<ListGroupItem key={location.LocationID} className="location" onClick={setLocationAs}>
+						<ListGroupItem key={location.LocationID} id={`location-card-${location.LocationID}`} className="location" onClick={setLocationAs}>
 							<div className="top-line">
 								<div className="name">{location.Name}</div>
 								<div className="distance">{location.Distance}</div>

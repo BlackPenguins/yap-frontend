@@ -1,12 +1,12 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const proxy = {
-	target: 'http://localhost:3500',
+	target: `http://backend:${process.env.SERVER_PORT}`,
 	changeOrigin: true,
 };
 
 const authProxy = {
-	target: 'http://localhost:7000',
+	target: `http://authentication:${process.env.AUTH_PORT}`,
 	changeOrigin: true,
 };
 

@@ -51,6 +51,14 @@ const HomePage = ({ distanceFilter, multiFilter }) => {
 
 	const [currentLocation, setCurrentLocation] = useState({});
 	const [locations, setLocations] = useState([]);
+	const [reviews, setReviews] = useState([]);
+
+	const fetchReviews = useCallback(async (locationID) => {
+		const response = await fetch(`/api/review/${locationID}`);
+		const reviews = await response.json();
+		console.log('Retrieved Reviews from Server', reviews);
+		setReviews(reviews);
+	}, []);
 
 	const fetchLocations = useCallback(async () => {
 		const response = await fetch(`/api/categoryGroups`);
@@ -126,6 +134,7 @@ const HomePage = ({ distanceFilter, multiFilter }) => {
 								map={map}
 								locationCollection={location}
 								setCurrentLocation={setCurrentLocation}
+								fetchReviews={fetchReviews}
 								distanceFilter={distanceFilter}
 								multiFilter={multiFilter}
 							/>
@@ -133,7 +142,7 @@ const HomePage = ({ distanceFilter, multiFilter }) => {
 					})}
 				</Col>
 				<Col lg={9}>
-					<DetailsSection currentLocation={currentLocation} />
+					<DetailsSection currentLocation={currentLocation} reviews={reviews} fetchReviews={fetchReviews} />
 					<Row>
 						<div id="google-map">Loading map...</div>
 					</Row>

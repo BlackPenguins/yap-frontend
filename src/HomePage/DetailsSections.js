@@ -1,9 +1,31 @@
-import { Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import InfoIcons from './InfoIcons';
+import AuthContext from '../store/auth-context';
+import { useContext, useState } from 'react';
+import { Review } from './Review';
+import EditReviewModal from './EditReviewModal';
 
-const DetailsSection = ({ currentLocation }) => {
+const DetailsSection = ({ currentLocation, reviews, fetchReviews }) => {
+	const authContext = useContext(AuthContext);
+	const currentReview = reviews.find((review) => review.UserID === authContext.userID);
+	const buttonLabel = currentReview ? 'Edit Review' : 'Add Review';
+
+	const [showReviewModal, setShowReviewModal] = useState(false);
+
+	const hideReviewModalHandler = () => setShowReviewModal(false);
+	const showReviewModalHandler = () => setShowReviewModal(true);
+	const fetchReviewsForLocation = () => fetchReviews(currentLocation.LocationID);
+
 	return (
 		<Row>
+			{showReviewModal && (
+				<EditReviewModal
+					currentLocation={currentLocation}
+					currentReview={currentReview}
+					closeModalHandler={hideReviewModalHandler}
+					fetchReviews={fetchReviewsForLocation}
+				/>
+			)}
 			<Col className="details-col details-end-col" lg={5}>
 				<div className="details-name-container">
 					<span id="details-name">{currentLocation?.Name}</span>
@@ -67,8 +89,16 @@ const DetailsSection = ({ currentLocation }) => {
 
 			<Col className="details-col details-end-col" lg={4}>
 				<div className="details-review-container">
-					<div className="details-review-name">NAME ★ ★ ★</div>
-					<div className="details-review-data">Likes, Dislikes</div>
+					{reviews.map((review) => {
+						const isYourReview = review.UserID == authContext.userID;
+
+						return <Review review={review} isYourReview={isYourReview} />;
+					})}
+					{authContext.token && (
+						<Button className="edit-review-button" onClick={showReviewModalHandler}>
+							{buttonLabel}
+						</Button>
+					)}
 				</div>
 			</Col>
 		</Row>
