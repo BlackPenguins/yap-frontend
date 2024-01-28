@@ -1,7 +1,7 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const proxy = {
-	target: `http://backend:${process.env.SERVER_PORT}`,
+	target: `http://yap-backend:${process.env.SERVER_PORT}`,
 	changeOrigin: true,
 };
 
